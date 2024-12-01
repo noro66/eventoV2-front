@@ -124,9 +124,7 @@ function CreateEventForm({ eventToEdit = {} }) {
           type="file"
           id="image"
           accept="image/*"
-          {...register("image", {
-            required: isEditSession ? false : "This field is required!",
-          })}
+          {...register("image")}
         />
       </FormRow>
 
