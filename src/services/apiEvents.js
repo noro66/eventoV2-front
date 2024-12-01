@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/events";
+export const API_URL = "http://localhost:3000/";
 
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("authToken");
+export const getAuthHeaders = () => {
+  const token = localStorage.getItem("accessToken");
   console.log(token);
   if (!token) {
     throw new Error("No authentication token found");
@@ -17,7 +17,7 @@ const getAuthHeaders = () => {
 
 export async function getEvents(keyword = "") {
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(API_URL + "events");
     return response.data;
   } catch (error) {
     console.error(error);
@@ -31,11 +31,15 @@ export async function createEditEvent(newEvent, id) {
 
     if (!id) {
       // Create event
-      response = await axios.post(API_URL, newEvent, getAuthHeaders());
+      response = await axios.post(
+        API_URL + "events",
+        newEvent,
+        getAuthHeaders()
+      );
     } else {
       // Update event
       response = await axios.put(
-        `${API_URL}/${id}`,
+        `${API_URL}/events/${id}`,
         newEvent,
         getAuthHeaders()
       );
@@ -50,7 +54,10 @@ export async function createEditEvent(newEvent, id) {
 
 export async function deleteEvent(id) {
   try {
-    const response = await axios.delete(`${API_URL}/${id}`, getAuthHeaders());
+    const response = await axios.delete(
+      `${API_URL}/events/${id}`,
+      getAuthHeaders()
+    );
     return response.data;
   } catch (error) {
     console.error(error);
@@ -61,7 +68,7 @@ export async function deleteEvent(id) {
 export async function addParticipants(eventId, participants) {
   try {
     const response = await axios.put(
-      `${API_URL}/add-participants/${eventId}`,
+      `${API_URL}/events/add-participants/${eventId}`,
       { participants },
       getAuthHeaders()
     );

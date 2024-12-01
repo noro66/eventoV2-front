@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ProtectedRoute from "./ui/ProtectedRoute";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -24,7 +25,13 @@ function App() {
       <GlotbalStyles />
       <BrowserRouter>
         <Routes>
-          <Route element={<AppLayout />}>
+          <Route
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="events" element={<Events />} />
