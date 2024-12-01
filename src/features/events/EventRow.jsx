@@ -56,7 +56,7 @@ export default function EventRow({ event }) {
   const { isDeleting, deleteEvent } = useDeleteEvent();
 
   const {
-    id,
+    _id: id,
     title,
     description,
     startDate,

@@ -4,6 +4,7 @@ const API_URL = "http://localhost:3000/events";
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("authToken");
+  console.log(token);
   if (!token) {
     throw new Error("No authentication token found");
   }
