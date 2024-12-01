@@ -10,10 +10,25 @@ import { useCreateEvent } from "./useCreateEvent";
 import { useEditEvent } from "./useEditEvent";
 
 function CreateEventForm({ eventToEdit = {} }) {
-  const { id: editId, ...editValues } = eventToEdit;
+  const { _id: editId, ...editValues } = eventToEdit;
   const isEditSession = Boolean(editId);
+  const { startDate, endDate } = eventToEdit;
+
+  const formattedStartDate = startDate
+    ? new Date(startDate).toISOString().split("T")[0]
+    : "";
+  const formattedEndDate = endDate
+    ? new Date(endDate).toISOString().split("T")[0]
+    : "";
+
   const { register, handleSubmit, reset, getValues, formState } = useForm({
-    defaultValues: isEditSession ? editValues : {},
+    defaultValues: isEditSession
+      ? {
+          ...editValues,
+          startDate: formattedStartDate,
+          endDate: formattedEndDate,
+        }
+      : {},
   });
 
   const { isCreating, createEvent } = useCreateEvent(reset);

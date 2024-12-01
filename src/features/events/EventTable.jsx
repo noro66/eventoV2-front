@@ -44,7 +44,7 @@ export default function EventTable() {
         <div></div>
       </TableHeader>
       {Events?.map((event) => (
-        <EventRow event={event} key={event.id} />
+        <EventRow event={event} key={event._id} />
       ))}
     </Table>
   );
