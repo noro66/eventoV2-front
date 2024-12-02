@@ -1,9 +1,27 @@
-# React + Vite
+# Frontend: Event Management Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+This is the frontend of the Event Management Application built using React, styled-components, and React Query. It allows users to view, create, edit, and manage events, and also enables adding participants to events.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# eventoV2-front
+## Technologies Used
+
+- React
+- React Query
+- Styled-Components
+- React Icons
+- React Hot Toast (for notifications)
+- Axios (for making API calls)
+
+## Setup
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn (package manager)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/frontend-event-management.git
