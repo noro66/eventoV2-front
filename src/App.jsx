@@ -10,6 +10,7 @@ import PageNotFound from "./pages/PageNotFound";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ProtectedRoute from "./ui/ProtectedRoute";
+import Users from "./pages/Users";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -35,7 +36,7 @@ function App() {
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="events" element={<Events />} />
-            {/* <Route path="users" element={<Users />} /> */}
+            <Route path="users" element={<Users />} />
           </Route>
           <Route path="login" element={<Login />} />
           <Route path="*" element={<PageNotFound />} />
