@@ -3,6 +3,7 @@ import { useState } from "react";
 import { HiPencil, HiTrash } from "react-icons/hi2";
 import CreateUserForm from "./CreateUserForm";
 import { useDeleteUser } from "./useDeleteUser";
+import ButtonIcon from "../../ui/ButtonIcon";
 
 const TableRow = styled.div`
   display: grid;
@@ -52,15 +53,15 @@ export default function UserRow({ user }) {
           {isAccountVerified ? "Verified" : "Not Verified"}
         </Status>
         <div>
-          <button
+          <ButtonIcon
             onClick={() => setShowForm((prev) => !prev)}
             disabled={isDeleting}
           >
             <HiPencil />
-          </button>
-          <button onClick={() => deleteUser(id)} disabled={isDeleting}>
+          </ButtonIcon>
+          <ButtonIcon onClick={() => deleteUser(id)} disabled={isDeleting}>
             <HiTrash />
-          </button>
+          </ButtonIcon>
         </div>
       </TableRow>
       {showForm && <CreateUserForm userToEdit={user} />}

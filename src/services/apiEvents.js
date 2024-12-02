@@ -38,7 +38,7 @@ export async function createEditEvent(newEvent, id) {
     } else {
       // Update event
       response = await axios.put(
-        `${API_URL}/events/${id}`,
+        `${API_URL}events/${id}`,
         newEvent,
         getAuthHeaders()
       );
@@ -54,7 +54,7 @@ export async function createEditEvent(newEvent, id) {
 export async function deleteEvent(id) {
   try {
     const response = await axios.delete(
-      `${API_URL}/events/${id}`,
+      `${API_URL}events/${id}`,
       getAuthHeaders()
     );
     return response.data;

@@ -5,6 +5,9 @@ import CreateEventForm from "./CreateEventForm.jsx";
 import { HiUserAdd } from "react-icons/hi";
 import { useAddParticipants } from "./useAddParticipants.js";
 import Spinner from "../../ui/Spinner.jsx";
+import Button from "../../ui/Button.jsx";
+import ButtonIcon from "../../ui/ButtonIcon.jsx";
+import { useDeleteEvent } from "./useDeleteEvent.js";
 
 const TableRow = styled.div`
   display: grid;
@@ -97,6 +100,7 @@ export default function EventRow({ event, users }) {
     event.participants.map((par) => par._id)
   );
   const { isAdding, addParticipantsToEvent } = useAddParticipants();
+  const { isDeleting, deleteEvent } = useDeleteEvent();
   const {
     _id: id,
     title,
@@ -139,15 +143,15 @@ export default function EventRow({ event, users }) {
         <Status status={status}>{status || "Unknown"}</Status>
         <Img src={eventImage} alt={title} />
         <div>
-          <button onClick={() => setShowForm((prev) => !prev)}>
+          <ButtonIcon onClick={() => setShowForm((prev) => !prev)}>
             <HiPencil />
-          </button>
-          <button>
+          </ButtonIcon>
+          <ButtonIcon disabled={isDeleting} onClick={() => deleteEvent(id)}>
             <HiTrash />
-          </button>
-          <button onClick={() => setShowUserList((s) => !s)}>
+          </ButtonIcon>
+          <ButtonIcon onClick={() => setShowUserList((s) => !s)}>
             <HiUserAdd />
-          </button>
+          </ButtonIcon>
         </div>
       </TableRow>
 
@@ -158,6 +162,23 @@ export default function EventRow({ event, users }) {
         ) : (
           <UserListModal>
             <h3>Select Participants</h3>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                marginBottom: "5px",
+              }}
+            >
+              <Button variations="primary" onClick={handleAddParticipants}>
+                <HiUserAdd />
+              </Button>
+              <Button
+                variation="secondary"
+                onClick={() => setShowUserList((s) => !s)}
+              >
+                Cancel
+              </Button>
+            </div>
             {users.map((user) => (
               <UserItem
                 key={user._id}
@@ -171,13 +192,6 @@ export default function EventRow({ event, users }) {
                 {user.username} ({user.email})
               </UserItem>
             ))}
-            <div>
-              <AddParticipantsButton onClick={handleAddParticipants}>
-                <HiUserAdd />
-                Add Selected
-              </AddParticipantsButton>
-              <button onClick={() => setShowUserList(false)}>Cancel</button>
-            </div>
           </UserListModal>
         ))}
 
