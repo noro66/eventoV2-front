@@ -6,11 +6,11 @@ export function useDeleteUser() {
   const queryClient = useQueryClient();
 
   const { isPending: isDeleting, mutate: deleteUser } = useMutation({
-    mutationFn: deleteUserApi, // API function for deleting a user
+    mutationFn: deleteUserApi,
     onSuccess: () => {
       toast.success("User successfully deleted!");
       queryClient.invalidateQueries({
-        queryKey: ["Users"], // Refetch the user list after deletion
+        queryKey: ["Users"],
       });
     },
     onError: (err) => toast.error(err.message || "Failed to delete user."),

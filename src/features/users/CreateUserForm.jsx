@@ -21,9 +21,10 @@ function CreateUserForm({ userToEdit = {} }) {
   const { errors } = formState;
 
   function onSubmit(data) {
+    const { password, username, ...other } = data;
     if (isEditSession) {
       editUser(
-        { newUserData: data, id: editId },
+        { newUserData: { username, password }, id: editId },
         {
           onSuccess: () => reset(),
         }
@@ -52,24 +53,26 @@ function CreateUserForm({ userToEdit = {} }) {
         />
       </FormRow>
 
-      <FormRow label="Email" error={errors?.email?.message}>
-        <Input
-          disabled={isWorking}
-          type="email"
-          id="email"
-          {...register("email", {
-            required: "This field is required!",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "Invalid email address!",
-            },
-            maxLength: {
-              value: 250,
-              message: "Email cannot exceed 250 characters!",
-            },
-          })}
-        />
-      </FormRow>
+      {!isEditSession ? (
+        <FormRow label="Email" error={errors?.email?.message}>
+          <Input
+            disabled={isWorking}
+            type="email"
+            id="email"
+            {...register("email", {
+              required: "This field is required!",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Invalid email address!",
+              },
+              maxLength: {
+                value: 250,
+                message: "Email cannot exceed 250 characters!",
+              },
+            })}
+          />
+        </FormRow>
+      ) : null}
 
       <FormRow label="Password" error={errors?.password?.message}>
         <Input
@@ -77,7 +80,7 @@ function CreateUserForm({ userToEdit = {} }) {
           type="password"
           id="password"
           {...register("password", {
-            required: "This field is required!",
+            required: isEditSession ? false : "This field is required!",
             minLength: {
               value: 6,
               message: "Password must be at least 6 characters long!",
@@ -86,17 +89,19 @@ function CreateUserForm({ userToEdit = {} }) {
         />
       </FormRow>
 
-      <FormRow
-        label="Account Verified"
-        error={errors?.isAccountVerified?.message}
-      >
-        <Input
-          disabled={isWorking}
-          type="checkbox"
-          id="isAccountVerified"
-          {...register("isAccountVerified")}
-        />
-      </FormRow>
+      {!isEditSession ? (
+        <FormRow
+          label="Account Verified"
+          error={errors?.isAccountVerified?.message}
+        >
+          <Input
+            disabled={isWorking}
+            type="checkbox"
+            id="isAccountVerified"
+            {...register("isAccountVerified")}
+          />
+        </FormRow>
+      ) : null}
 
       <FormRow>
         <Button variation="secondary" type="reset" onClick={() => reset()}>

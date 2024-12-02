@@ -30,7 +30,7 @@ export async function createEditUser(newUser, id) {
     } else {
       // Update user
       response = await axios.put(
-        `${API_URL}/users/${id}`,
+        `${API_URL}users/${id}`,
         newUser,
         getAuthHeaders()
       );
@@ -47,7 +47,7 @@ export async function createEditUser(newUser, id) {
 export async function deleteUser(id) {
   try {
     const response = await axios.delete(
-      `${API_URL}/users/${id}`,
+      `${API_URL}users/${id}`,
       getAuthHeaders()
     );
     return response.data;

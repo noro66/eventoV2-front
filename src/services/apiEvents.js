@@ -4,7 +4,6 @@ export const API_URL = "http://localhost:3000/";
 
 export const getAuthHeaders = () => {
   const token = localStorage.getItem("accessToken");
-  console.log(token);
   if (!token) {
     throw new Error("No authentication token found");
   }
