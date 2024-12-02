@@ -65,9 +65,11 @@ export async function deleteEvent(id) {
 }
 
 export async function addParticipants(eventId, participants) {
+  console.log("step2", eventId, participants);
+
   try {
     const response = await axios.put(
-      `${API_URL}/events/add-participants/${eventId}`,
+      `${API_URL}events/add-participants/${eventId}`,
       { participants },
       getAuthHeaders()
     );

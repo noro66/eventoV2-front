@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getEvents } from "../../services/apiEvents";
+import { getUsers } from "../../services/apiUsers";
 
 export function useEvents() {
   const {
@@ -12,9 +13,20 @@ export function useEvents() {
     queryFn: () => getEvents(),
   });
 
+  const {
+    isPending: isLoading,
+    data: Users,
+    error: userError,
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+  } = useQuery({
+    queryKey: ["Users"],
+    queryFn: () => getUsers(),
+  });
+
   return {
-    isPending,
+    isPending: isLoading && isLoading,
     Events,
+    Users,
     error,
   };
 }

@@ -27,7 +27,7 @@ const TableHeader = styled.header`
 `;
 
 export default function EventTable() {
-  const { isPending, Events, error } = useEvents();
+  const { isPending, Events, Users, error } = useEvents();
 
   if (isPending) return <Spinner />;
   if (error) return <div>Error loading events: {error.message}</div>;
@@ -44,7 +44,7 @@ export default function EventTable() {
         <div></div>
       </TableHeader>
       {Events?.map((event) => (
-        <EventRow event={event} key={event._id} />
+        <EventRow event={event} users={Users} key={event._id} />
       ))}
     </Table>
   );

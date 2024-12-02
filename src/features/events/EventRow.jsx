@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { useDeleteEvent } from "./useDeleteEvent.js";
-import CreateEventForm from "./CreateEventForm.jsx";
 import { HiPencil, HiTrash } from "react-icons/hi2";
+import CreateEventForm from "./CreateEventForm.jsx";
+import { HiUserAdd } from "react-icons/hi";
+import { useAddParticipants } from "./useAddParticipants.js";
+import Spinner from "../../ui/Spinner.jsx";
 
 const TableRow = styled.div`
   display: grid;
@@ -51,10 +53,50 @@ const Status = styled.div`
       : "var(--color-red-700)"};
 `;
 
-export default function EventRow({ event }) {
-  const [showForm, setShowForm] = useState(false);
-  const { isDeleting, deleteEvent } = useDeleteEvent();
+const UserListModal = styled.div`
+  position: absolute;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  max-height: 60%;
+  overflow-y: auto;
+  z-index: 100;
+`;
 
+const UserItem = styled.div`
+  padding: 1rem;
+  background: var(--color-grey-100);
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  &:hover {
+    background: var(--color-grey-200);
+  }
+`;
+
+const AddParticipantsButton = styled.button`
+  padding: 0.8rem 1.6rem;
+  background: var(--color-blue-500);
+  color: var(--color-blue-500);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background: var(--color-blue-600);
+  }
+`;
+
+export default function EventRow({ event, users }) {
+  const [showForm, setShowForm] = useState(false);
+  const [showUserList, setShowUserList] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState(() =>
+    event.participants.map((par) => par._id)
+  );
+  const { isAdding, addParticipantsToEvent } = useAddParticipants();
   const {
     _id: id,
     title,
@@ -69,6 +111,23 @@ export default function EventRow({ event }) {
   // Handle image fallback
   const eventImage = image || "placeholder-image-url.jpg";
 
+  // Toggle user selection
+  const handleSelectUser = (userId) => {
+    setSelectedUsers((prev) =>
+      prev.includes(userId)
+        ? prev.filter((id) => id !== userId)
+        : [...prev, userId]
+    );
+  };
+
+  // Handle adding participants (UI only)
+  const handleAddParticipants = () => {
+    addParticipantsToEvent({ eventId: id, participants: selectedUsers });
+    console.log("step1", { eventId: id, participants: selectedUsers });
+
+    setShowUserList(false);
+  };
+
   return (
     <>
       <TableRow role="row">
@@ -80,17 +139,48 @@ export default function EventRow({ event }) {
         <Status status={status}>{status || "Unknown"}</Status>
         <Img src={eventImage} alt={title} />
         <div>
-          <button
-            onClick={() => setShowForm((prev) => !prev)}
-            disabled={isDeleting} // Disable form toggle while deleting
-          >
+          <button onClick={() => setShowForm((prev) => !prev)}>
             <HiPencil />
           </button>
-          <button onClick={() => deleteEvent(id)} disabled={isDeleting}>
+          <button>
             <HiTrash />
+          </button>
+          <button onClick={() => setShowUserList((s) => !s)}>
+            <HiUserAdd />
           </button>
         </div>
       </TableRow>
+
+      {/* Modal for selecting participants */}
+      {showUserList &&
+        (isAdding ? (
+          <Spinner />
+        ) : (
+          <UserListModal>
+            <h3>Select Participants</h3>
+            {users.map((user) => (
+              <UserItem
+                key={user._id}
+                onClick={() => handleSelectUser(user._id)}
+                style={{
+                  backgroundColor: selectedUsers.includes(user._id)
+                    ? "var(--color-green-100)"
+                    : "var(--color-grey-100)",
+                }}
+              >
+                {user.username} ({user.email})
+              </UserItem>
+            ))}
+            <div>
+              <AddParticipantsButton onClick={handleAddParticipants}>
+                <HiUserAdd />
+                Add Selected
+              </AddParticipantsButton>
+              <button onClick={() => setShowUserList(false)}>Cancel</button>
+            </div>
+          </UserListModal>
+        ))}
+
       {showForm && <CreateEventForm eventToEdit={event} />}
     </>
   );
