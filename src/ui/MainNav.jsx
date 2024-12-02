@@ -1,12 +1,9 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import {
-  HiOutlineCalendarDays,
-  HiOutlineCog6Tooth,
-  HiOutlineHome,
-  HiOutlineHomeModern,
-} from "react-icons/hi2";
+import { HiOutlineHome, HiOutlineHomeModern } from "react-icons/hi2";
 import { HiOutlineUsers } from "react-icons/hi";
+import { useUser } from "../features/authentication/useUser";
+import Spinner from "./Spinner";
 
 const NavList = styled.ul`
   display: flex;
@@ -54,6 +51,8 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 function MainNav() {
+  const { isPending, user } = useUser();
+
   return (
     <nav>
       <NavList>
@@ -70,12 +69,18 @@ function MainNav() {
             <span>Events</span>
           </StyledNavLink>
         </li>
-        <li>
-          <StyledNavLink to="/users">
-            <HiOutlineUsers />
-            <span>Users</span>
-          </StyledNavLink>
-        </li>
+        {isPending ? (
+          <Spinner />
+        ) : (
+          user.userType === "admin" && (
+            <li>
+              <StyledNavLink to="/users">
+                <HiOutlineUsers />
+                <span>Users</span>
+              </StyledNavLink>
+            </li>
+          )
+        )}
         {/* <li><StyledNavLink to='/settings'><HiOutlineCog6Tooth/><span>Settings</span></StyledNavLink></li> */}
       </NavList>
     </nav>
