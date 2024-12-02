@@ -2,12 +2,13 @@ import styled from "styled-components";
 import { useState } from "react";
 import { HiPencil, HiTrash } from "react-icons/hi2";
 import CreateEventForm from "./CreateEventForm.jsx";
-import { HiUserAdd } from "react-icons/hi";
+import { HiUpload, HiUserAdd } from "react-icons/hi";
 import { useAddParticipants } from "./useAddParticipants.js";
 import Spinner from "../../ui/Spinner.jsx";
 import Button from "../../ui/Button.jsx";
 import ButtonIcon from "../../ui/ButtonIcon.jsx";
 import { useDeleteEvent } from "./useDeleteEvent.js";
+import { useGeneratePDF } from "../../hooks/useGeneratePDF.js";
 
 const TableRow = styled.div`
   display: grid;
@@ -99,6 +100,7 @@ export default function EventRow({ event, users }) {
   const [selectedUsers, setSelectedUsers] = useState(() =>
     event.participants.map((par) => par._id)
   );
+  const { generatePDF } = useGeneratePDF();
   const { isAdding, addParticipantsToEvent } = useAddParticipants();
   const { isDeleting, deleteEvent } = useDeleteEvent();
   const {
@@ -151,6 +153,9 @@ export default function EventRow({ event, users }) {
           </ButtonIcon>
           <ButtonIcon onClick={() => setShowUserList((s) => !s)}>
             <HiUserAdd />
+          </ButtonIcon>
+          <ButtonIcon onClick={() => generatePDF(event)}>
+            <HiUpload />
           </ButtonIcon>
         </div>
       </TableRow>
